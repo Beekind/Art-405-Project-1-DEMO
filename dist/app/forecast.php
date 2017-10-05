@@ -40,14 +40,37 @@
   // Call DarkSky and pass along the coordinates we got from Google
   $forecast = 'https://api.darksky.net/forecast/'.$keys['darksky'].'/'.$coordinates.'/?exclude=minutely?exclude=hourly?lang=es';
 
+  $keywords = array(
+    'coffee',
+    'tea',
+    'burgers',
+    'pizza',
+    'boba',
+    'shaved+ice',
+    'tacos',
+    'thai',
+    'chinese',
+    'mexican'
+  );
+
+  $keyword = $keywords[4];
+
+  // Call Google Places and search for restaraunts using the coordinates
+  $places = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='.$coordinates.'&radius=10000&type=restaurant&keyword='.$keyword.'&key='.$google_key;
+
+  $places = json_decode(file_get_contents($places));
+
+
   // Get our forecast data back
-  $forecast = json_decode(file_get_contents($forecast), true);
+  $forecast = json_decode(file_get_contents($forecast));
 
   // Test Array
-  echo '<pre>';
-  print_r($forecast);
-  echo '</pre>';
+  // echo '<pre>';
+  // print_r($forecast);
+  // echo '<hr>';
+  // print_r($places);
+  // echo '</pre>';
 
   // Weather Variables
-  $temp_current = round($forecast["currently"]["temperature"]);
-  $humidity_current = $forecast["currently"]["humidity"]*100;
+  $temp_current = round($forecast->currently->temperature);
+  $humidity_current = $forecast->currently->humidity*100;
